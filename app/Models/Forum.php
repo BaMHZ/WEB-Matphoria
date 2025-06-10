@@ -14,6 +14,9 @@ class Forum extends Model
         'description',
         'content',
         'user_id',
+        'image',
+        'kelas',
+
     ];
 
     public function comments()

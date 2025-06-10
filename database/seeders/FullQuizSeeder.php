@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 class FullQuizSeeder extends Seeder
 {
     public function run(): void
+
     {
         // Bikin User Dummy
         $user = User::firstOrCreate(
@@ -80,4 +81,9 @@ class FullQuizSeeder extends Seeder
             'completed_at' => now(),
         ]);
     }
+
+{
+    // Seeder ini tidak lagi digunakan karena kuis dibuat langsung oleh guru.
+}
+
 }

@@ -1,5 +1,6 @@
 <?php
 
+
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\ProgressController;
 use Illuminate\Support\Facades\Route;
@@ -15,4 +16,11 @@ Route::delete('/quiz/{id}', [QuizController::class, 'destroy']);
 Route::get('/progress/{userId}', [ProgressController::class, 'getProgress']);
 Route::post('/progress/{userId}', [ProgressController::class, 'updateProgress']);
 
+
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+
+// Kosong atau hanya API khusus nanti
+// Saat ini, tidak diperlukan.
 

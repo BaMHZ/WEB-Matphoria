@@ -33,18 +33,32 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+
+            'kelas' => 'required|string'
+
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+<<<<<<< HEAD
+=======
+            'role' => 'siswa', 
+            'kelas' => $request->kelas, 
+>>>>>>> main
         ]);
 
         event(new Registered($user));
 
         Auth::login($user);
 
+<<<<<<< HEAD
         return redirect('http://web-student.test/login')->with('success', 'Registrasi berhasil! Silakan masuk.');
     }
 }
+=======
+        return redirect('/login')->with('success', 'Registrasi berhasil! Silakan masuk.');
+    }
+}
+>>>>>>> main

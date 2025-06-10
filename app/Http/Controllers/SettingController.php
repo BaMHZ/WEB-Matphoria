@@ -15,8 +15,11 @@ class SettingController extends Controller
         return view('information.setting');
     }
 
+
     public function store(Request $request)
 {
+        $user = Auth::user();
+    $setting = $user->setting;                              
     $request->validate([
         'nama' => 'required',
         'nisn' => 'required|unique:settings',
@@ -35,7 +38,8 @@ class SettingController extends Controller
         $file->storeAs('public/foto-profile', $filename);
         $path = 'foto-profile/' . $filename;
 
-        $user = User::find(Auth::id());
+
+
     if ($user) {
         $user->foto = $path;
         $user->save();
@@ -44,6 +48,16 @@ class SettingController extends Controller
 
     // ✅ Simpan juga ke tabel settings
     Setting::create([
+
+        if ($user) {
+            $user->foto = $path;
+            $user->save();
+        }
+    }
+
+    Setting::create([
+        'user_id' => Auth::id(), // ⬅️ WAJIB
+
         'nama' => $request->nama,
         'nisn' => $request->nisn,
         'kelas' => $request->kelas,
@@ -51,6 +65,8 @@ class SettingController extends Controller
         'alamat' => $request->alamat,
         'jenis_kelamin' => $request->jenis_kelamin,
         'foto' => $path, // Boleh null kalau tidak upload
+        'foto' => $path,
+
     ]);
 
     return redirect('/setting/information')->with('success', 'Data berhasil disimpan.');
@@ -73,7 +89,13 @@ class SettingController extends Controller
 
     public function information()
     {
+
         $setting = Setting::latest()->first();
+
+          /** @var \App\Models\User $user */
+    $user = Auth::user();
+    $setting = $user->setting;
+
         return view('information.information', compact('setting'));
     }
 

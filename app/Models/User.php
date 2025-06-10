@@ -17,11 +17,15 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+
+
+        'user_id',
         'name',
         'email',
         'password',
         'foto',
         'role',
+        'kelas',
     ];
 
     /**
@@ -33,6 +37,12 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
+
 
     /**
      * Get the attributes that should be cast.
@@ -51,5 +61,46 @@ class User extends Authenticatable
     {
     return $this->hasMany(QuizResult::class);
     }
+
+
+    public function isGuru()
+    {
+    return $this->role === 'guru';
+    }
+
+    public function isSiswa()
+    {
+    return $this->role === 'siswa';
+    }
+
+    public function kelasDiampu()
+{
+    return $this->belongsToMany(\App\Models\Kelas::class, 'guru_kelas', 'user_id', 'kelas_id');
+}
+public function sentMessages()
+{
+    return $this->hasMany(Message::class, 'sender_id');
+}
+
+public function receivedMessages()
+{
+    return $this->hasMany(Message::class, 'receiver_id');
+}
+
+public function setting()
+{
+    return $this->hasOne(\App\Models\Setting::class);
+}
+
+public function gurus()
+{
+    return $this->kelas?->guru ?? collect();
+}
+
+public function kelas()
+{
+    return $this->belongsTo(\App\Models\Kelas::class, 'kelas_id');
+}
+
 
 }

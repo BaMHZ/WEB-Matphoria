@@ -79,6 +79,9 @@
                                 List of Materials
                             </a>
                             <a href="{{ route('discussion') }}"
+
+                            <a href="{{ route('discussion.show', Auth::user()->id) }}"
+
                                 class="group flex items-center px-4 py-2 text-sm rounded-md transition-all duration-200
                                 {{ Request::is('discussion') ? 'bg-gray-300 text-indigo-800' : 'text-indigo-800 hover:bg-gray-300 hover:text-indigo-800' }}">
                                 Discussion with Teacher
@@ -109,6 +112,9 @@
                         </button>
                         <div class="hidden space-y-1 pl-11" id="quiz-dropdown">
                             <a href="#"
+
+                            <a href="{{ route('quizzes.index') }}"
+
                                 class="group flex items-center px-4 py-2 text-sm rounded-md transition-all duration-200 text-indigo-800 hover:bg-gray-300 hover:text-indigo-800"
                                 target="_blank">
                                 Take a Quiz
@@ -172,6 +178,9 @@
 
                     <!-- Documents -->
                     <a href="#"
+
+                    <a href="{{ route('setting.information') }}"
+
                         class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg text-indigo-800 hover:bg-gray-300 hover:text-indigo-800 group transition-all duration-200">
                         <svg class="h-5 w-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none"
                             viewBox="0 0 24 24" stroke="currentColor">
@@ -192,6 +201,12 @@
                     <div class="ml-3">
                         <p class="text-sm font-medium text-gray-700">{{ Auth::user()->name }}</p>
                         <p class="text-xs text-gray-400">{{ Auth::user()->email }}</p>
+
+                        <span
+                            class="inline-block mt-1 px-2 py-1 bg-indigo-100 text-indigo-700 rounded text-xs font-semibold">
+                            Kelas: {{ Auth::user()->kelas }}
+                        </span>
+
                     </div>
                 </div>
             </div>
@@ -315,6 +330,93 @@
             });
         });
     </script>
+
+        {{-- <!-- Main Content -->
+        <main class="p-6 min-h-screen bg-gray-100">
+            <h1 class="text-xl font-bold mb-4">Chat dengan {{ $receiver->name }}</h1>
+
+            <div class="bg-white p-4 rounded shadow h-[500px] overflow-y-auto mb-4">
+                @foreach ($messages as $msg)
+                    <div class="mb-2 flex {{ $msg->sender_id === auth()->id() ? 'justify-end' : 'justify-start' }}">
+                        <div
+                            class="px-4 py-2 rounded-lg {{ $msg->sender_id === auth()->id() ? 'bg-blue-500 text-white' : 'bg-gray-200' }}">
+                            {{ $msg->content }}
+                            <div class="text-xs text-right text-gray-600">{{ $msg->created_at->format('H:i') }}</div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+
+            <form action="{{ route('discussion.send') }}" method="POST" class="flex space-x-2">
+                @csrf
+                <input type="hidden" name="receiver_id" value="{{ $receiver->id }}">
+                <input type="text" name="content" class="flex-1 p-2 border rounded" placeholder="Ketik pesan..."
+                    required>
+                <button class="bg-blue-600 text-white px-4 rounded">Kirim</button>
+            </form>
+        </main>
+    </div> --}}
+
+        <script>
+            function sendMessage() {
+                let chatInput = document.getElementById("chatInput");
+                let chatBox = document.getElementById("chatBox");
+                let message = chatInput.value.trim();
+
+                if (message !== "") {
+                    // User message
+                    let userMsg = document.createElement("div");
+                    userMsg.className = "bg-blue-500 text-white p-3 rounded-lg self-end max-w-xs w-auto ml-auto";
+                    userMsg.textContent = "Anda: " + message;
+                    chatBox.appendChild(userMsg);
+
+                    chatInput.value = "";
+                    chatBox.scrollTop = chatBox.scrollHeight;
+
+                    // Simulated Guru reply
+                    setTimeout(() => {
+                        let guruMsg = document.createElement("div");
+                        guruMsg.className = "bg-gray-200 text-black p-3 rounded-lg self-start max-w-xs w-auto";
+                        guruMsg.textContent = "Guru: Saya akan membantu menjawab pertanyaan Anda!";
+                        chatBox.appendChild(guruMsg);
+                        chatBox.scrollTop = chatBox.scrollHeight;
+                    }, 1000);
+                }
+            }
+
+            function handleKeyPress(event) {
+                if (event.key === "Enter") {
+                    sendMessage();
+                }
+            }
+        </script>
+
+        <script>
+            function confirmLogout() {
+                if (confirm("Apakah Anda yakin ingin logout?")) {
+                    document.getElementById('logout-form').submit();
+                }
+            }
+        </script>
+        <script>
+            function toggleDropdown() {
+                document.getElementById("dropdown").classList.toggle("hidden");
+            }
+        </script>
+        <script>
+            // Dropdown functionality
+            document.querySelectorAll('button[aria-controls]').forEach(button => {
+                button.addEventListener('click', () => {
+                    const isExpanded = button.getAttribute('aria-expanded') === 'true';
+                    const dropdownContent = document.getElementById(button.getAttribute('aria-controls'));
+
+                    button.setAttribute('aria-expanded', !isExpanded);
+                    dropdownContent.classList.toggle('hidden');
+                    button.querySelector('svg:last-child').classList.toggle('rotate-180');
+                });
+            });
+        </script>
+
 </body>
 
 </html>
